@@ -1,22 +1,9 @@
+# Ignore the build directories from both core and fe
+core/target/
+fe/target/
 
-# dependencies
-/fe/node_modules
-/fe/.pnp
-/fe/.pnp.js
+# Ignore .idea folders from both core and fe
+.idea/
 
-# testing
-/fe/coverage
-
-# production
-/fe/build
-
-# misc
-/fe/.DS_Store
-/fe/.env.local
-/fe/.env.development.local
-/fe/.env.test.local
-/fe/.env.production.local
-
-/fe/npm-debug.log*
-/fe/yarn-debug.log*
-/fe/yarn-error.log*
+# Node modules in the frontend
+fe/node_modules/
