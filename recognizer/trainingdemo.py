@@ -10,6 +10,7 @@ path = "datasets"
 # Dictionary to store mapping between string IDs and numeric labels
 id_mapping = {}
 
+
 def getImageID(path):
     imagePaths = [os.path.join(path, f) for f in os.listdir(path)]
     faces = []
@@ -19,10 +20,10 @@ def getImageID(path):
     for imagePath in imagePaths:
         faceImage = Image.open(imagePath).convert('L')
         faceNP = np.array(faceImage)
-        
+
         # Extract string ID from filename (Assuming format: "user.stringID.number.jpg")
         string_id = os.path.split(imagePath)[-1].split(".")[1]  # Extract the second part as string ID
-        
+
         # Assign a unique integer ID if this string_id is new
         if string_id not in id_mapping:
             id_mapping[string_id] = unique_id
@@ -37,6 +38,7 @@ def getImageID(path):
         cv2.waitKey(1)
 
     return ids, faces
+
 
 # Get numeric IDs and face data
 IDs, facedata = getImageID(path)
