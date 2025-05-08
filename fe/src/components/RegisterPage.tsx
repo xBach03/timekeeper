@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 import "../assets/css/RegisterPage.css";
+import { useNavigate } from "react-router-dom";
 
 export const RegisterPage: React.FC = () => {
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate("/"); // ✅ Navigates to the NavigationPage
+    };
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         dob: "",
         phone: "",
+        title: ""
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,11 +21,35 @@ export const RegisterPage: React.FC = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Submitted Data:", formData);
-        // You can send this to an API here
-        alert("Registration submitted!");
+
+        const dto = {
+            name: formData.name,
+            email: formData.email,
+            dateOfBirth: formData.dob, // Make sure this is in ISO format
+            phoneNumber: formData.phone,
+            title: formData.title
+        };
+
+        try {
+            const response = await fetch("http://localhost:8080/api/employee/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dto)
+            });
+
+            if (response.ok) {
+                alert("Registration successful!");
+            } else {
+                alert("Failed to register.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Error submitting registration.");
+        }
     };
 
     return (
@@ -27,26 +58,34 @@ export const RegisterPage: React.FC = () => {
             <form onSubmit={handleSubmit} className="register-form">
                 <label>
                     Full Name:
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} required/>
                 </label>
 
                 <label>
                     Email:
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} required/>
                 </label>
 
                 <label>
                     Date of Birth:
-                    <input type="date" name="dob" value={formData.dob} onChange={handleChange} required />
+                    <input type="date" name="dob" value={formData.dob} onChange={handleChange} required/>
                 </label>
 
                 <label>
                     Phone Number:
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required/>
+                </label>
+
+                <label>
+                    Job Title:
+                    <input type="text" name="title" value={formData.title} onChange={handleChange} required/>
                 </label>
 
                 <button type="submit">Register</button>
             </form>
+            <div className="back-button-container">
+                <button onClick={handleBack} className="back-button">← Back</button>
+            </div>
         </div>
     );
 };

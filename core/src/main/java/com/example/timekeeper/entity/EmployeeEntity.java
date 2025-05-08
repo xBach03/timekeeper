@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -42,6 +43,9 @@ public class EmployeeEntity {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "dob")
+    private Date dateOfBirth;
 
     @ManyToOne
     @JoinColumn(name = "department_id")

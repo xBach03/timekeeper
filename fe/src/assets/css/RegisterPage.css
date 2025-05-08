@@ -50,3 +50,24 @@
 .register-form button:hover {
     background-color: #1d4ed8;
 }
+
+.back-button-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.back-button {
+    padding: 10px 12px;
+    font-size: 14px;
+    background-color: #2563eb;
+    color: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #e0e0e0;
+}
