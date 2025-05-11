@@ -1,7 +1,13 @@
 import React from "react";
-import "../assets/css/IndexPage.css"; // Import the CSS
+import "../assets/css/IndexPage.css";
+import { useNavigate } from "react-router-dom";
 
 export const IndexPage: React.FC = () => {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        localStorage.removeItem("isLoggedIn");
+        navigate("/"); // Go back to navigation page
+    };
     return (
         <div className="layout">
             <aside className="sidebar">
@@ -20,6 +26,11 @@ export const IndexPage: React.FC = () => {
                     <div className="user">
                         <span className="user-icon">👤</span>
                         <span>Admin</span>
+                    </div>
+                    <div className="user">
+                        <span className="user-icon">👤</span>
+                        <span>Admin</span>
+                        <button className="logout-button" onClick={handleLogout}>Logout</button>
                     </div>
                 </header>
 

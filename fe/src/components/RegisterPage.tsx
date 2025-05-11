@@ -6,7 +6,7 @@ export const RegisterPage: React.FC = () => {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        navigate("/"); // ✅ Navigates to the NavigationPage
+        navigate("/"); //
     };
     const [formData, setFormData] = useState({
         name: "",
@@ -27,7 +27,7 @@ export const RegisterPage: React.FC = () => {
         const dto = {
             name: formData.name,
             email: formData.email,
-            dateOfBirth: formData.dob, // Make sure this is in ISO format
+            dateOfBirth: formData.dob, // Make sure dob is in ISO format
             phoneNumber: formData.phone,
             title: formData.title
         };
