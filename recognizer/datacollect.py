@@ -1,31 +1,96 @@
-# pip install opencv-python==4.5.2
-
 import cv2
+import os
+import dlib
+from imutils import face_utils
+from scipy.spatial import distance as dist
 
-video = cv2.VideoCapture(0)
+# Blink detection settings
+BLINK_THRESHOLD = 0.27
+CONSEC_FRAMES = 3
 
-facedetect = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
-id = input("Enter Your ID: ")
-# id = int(id)
-count = 0
+def eye_aspect_ratio(eye):
+    A = dist.euclidean(eye[1], eye[5])
+    B = dist.euclidean(eye[2], eye[4])
+    C = dist.euclidean(eye[0], eye[3])
+    return (A + B) / (2.0 * C)
 
-while True:
-    ret, frame = video.read()
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    faces = facedetect.detectMultiScale(gray, 1.3, 5)
-    for (x, y, w, h) in faces:
-        count = count + 1
-        cv2.imwrite('datasets/User.' + str(id) + "." + str(count) + ".jpg", gray[y:y + h, x:x + w])
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (50, 50, 255), 1)
 
-    cv2.imshow("Frame", frame)
+def collect_face_data(name, max_samples, save_dir="datasets"):
+    person_dir = os.path.join(save_dir, name)
+    os.makedirs(person_dir, exist_ok=True)
 
-    k = cv2.waitKey(1)
+    face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+    detector = dlib.get_frontal_face_detector()
+    predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
-    if count > 500:
-        break
+    cap = cv2.VideoCapture(0)
+    count = 0
+    blink_counter = 0
+    liveness_passed = False
 
-video.release()
-cv2.destroyAllWindows()
-print("Dataset Collection Done..................")
+    print(f" Blink once to begin collecting data for {name}...")
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+        for (x, y, w, h) in faces:
+            face_img = frame[y:y + h, x:x + w]
+            rect = dlib.rectangle(int(x), int(y), int(x + w), int(y + h))
+            shape = predictor(gray, rect)
+            shape = face_utils.shape_to_np(shape)
+
+            (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"]
+            (rStart, rEnd) = face_utils.FACIAL_LANDMARKS_IDXS["right_eye"]
+            leftEye = shape[lStart:lEnd]
+            rightEye = shape[rStart:rEnd]
+            ear = (eye_aspect_ratio(leftEye) + eye_aspect_ratio(rightEye)) / 2.0
+
+            # Blink detection
+            if not liveness_passed:
+                if ear < BLINK_THRESHOLD:
+                    blink_counter += 1
+                else:
+                    if blink_counter >= CONSEC_FRAMES:
+                        liveness_passed = True
+                        print(" Blink detected! Starting data collection...")
+                    blink_counter = 0
+                msg = "Blink to Start"
+            else:
+                msg = f"Collecting: {count}/{max_samples}"
+
+                # Save multiple images rapidly after liveness check
+                for i in range(2):  # Capture 2 frames per loop
+                    ret2, frame2 = cap.read()
+                    if not ret2:
+                        break
+                    face_img = frame2[y:y + h, x:x + w]
+                    resized_face = cv2.resize(face_img, (200, 200))
+                    count += 1
+                    cv2.imwrite(f"{person_dir}/{count}.jpg", resized_face)
+                    if count >= max_samples:
+                        break
+
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.putText(frame, msg, (x, y - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
+
+        cv2.imshow("Face Data Collection", frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('q') or count >= max_samples:
+            break
+
+    print(f"\n Collected {count} samples for {name}.")
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    person_name = input("Enter name to register: ")
+    samples_count = int(input("Enter number of samples to collect: "))
+    collect_face_data(person_name, samples_count)
