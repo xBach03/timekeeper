@@ -1,52 +1,41 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../assets/css/LoginPage.css";
 
 export const LoginPage: React.FC = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const [credentials, setCredentials] = useState({ username: "", password: "" });
+    const [dateTime, setDateTime] = useState(new Date().toLocaleString());
+    const [status, setStatus] = useState("");
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCredentials({ ...credentials, [e.target.name]: e.target.value });
-    };
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setDateTime(new Date().toLocaleString());
+        }, 1000);
+        return () => clearInterval(timer);
+    }, []);
 
-    const handleLogin = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        // Dummy auth check (replace with real one)
-        if (credentials.username === "admin" && credentials.password === "1234") {
-            localStorage.setItem("isLoggedIn", "true");
-
-            const from = (location.state as any)?.from?.pathname || "/index";
-            navigate(from); // Redirect to where the user came from
-        } else {
-            alert("Invalid credentials");
+    const handleRecognize = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/api/recognizer/recognize");
+            const text = await response.text();
+            if (response.ok && text && text.toLowerCase().includes("recognized")) {
+                localStorage.setItem("isLoggedIn", "true");
+                navigate("/index");
+            } else {
+                setStatus(`Not recognized: ${text}`);
+            }
+        } catch (error) {
+            console.error(error);
+            setStatus("Error calling recognition API");
         }
     };
 
     return (
         <div className="login-container">
             <h2>Login</h2>
-            <form onSubmit={handleLogin} className="login-form">
-                <input
-                    name="username"
-                    type="text"
-                    placeholder="Username"
-                    value={credentials.username}
-                    onChange={handleChange}
-                    required
-                />
-                <input
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    value={credentials.password}
-                    onChange={handleChange}
-                    required
-                />
-                <button type="submit">Login</button>
-            </form>
+            <p className="datetime">{dateTime}</p>
+            <button className="recognize-btn" onClick={handleRecognize}>Recognize Face</button>
+            {status && <p className="status-message">{status}</p>}
         </div>
     );
 };

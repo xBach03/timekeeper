@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 export const RegisterPage: React.FC = () => {
     const navigate = useNavigate();
 
+    const url = "http://localhost:8080/api";
+
     const handleBack = () => {
         navigate("/"); //
     };
@@ -33,16 +35,23 @@ export const RegisterPage: React.FC = () => {
         };
 
         try {
-            const response = await fetch("http://localhost:8080/api/employee/register", {
+            const response = await fetch(url + "/employee/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(dto)
+                body: JSON.stringify({ name: dto.name })
             });
 
             if (response.ok) {
-                alert("Registration successful!");
+                const response = await fetch(url + "/recognizer/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dto.name)
+                });
+                alert("Register successfully " + await response.text())
             } else {
                 alert("Failed to register.");
             }
