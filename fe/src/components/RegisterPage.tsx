@@ -40,7 +40,7 @@ export const RegisterPage: React.FC = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ name: dto.name })
+                body: JSON.stringify(dto)
             });
 
             if (response.ok) {
@@ -49,9 +49,16 @@ export const RegisterPage: React.FC = () => {
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify(dto.name)
+                    body: JSON.stringify({ name: dto.name })
                 });
-                alert("Register successfully " + await response.text())
+                alert("Register successfully\n" + await response.text())
+                setFormData({
+                    name: "",
+                    email: "",
+                    dob: "",
+                    phone: "",
+                    title: ""
+                });
             } else {
                 alert("Failed to register.");
             }
