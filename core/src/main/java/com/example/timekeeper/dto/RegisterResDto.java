@@ -7,8 +7,8 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class RecognizeResDto {
-    String blink;
+public class RegisterResDto {
     String name;
+    String message;
     String status;
 }
