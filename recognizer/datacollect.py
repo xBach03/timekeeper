@@ -16,7 +16,7 @@ def eye_aspect_ratio(eye):
     return (A + B) / (2.0 * C)
 
 
-def collect_face_data(name, max_samples, save_dir="datasets"):
+def collect_face_data(name, max_samples=30, save_dir="datasets"):
     person_dir = os.path.join(save_dir, name)
     os.makedirs(person_dir, exist_ok=True)
 
@@ -88,9 +88,5 @@ def collect_face_data(name, max_samples, save_dir="datasets"):
     print(f"\n Collected {count} samples for {name}.")
     cap.release()
     cv2.destroyAllWindows()
+    return f"Collected {count} samples for {name}"
 
-
-if __name__ == "__main__":
-    person_name = input("Enter name to register: ")
-    samples_count = int(input("Enter number of samples to collect: "))
-    collect_face_data(person_name, samples_count)
