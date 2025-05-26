@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/LoginPage.css";
 
-export const LoginPage: React.FC = () => {
+export const CheckInPage: React.FC = () => {
+    const url = "http://localhost:8080"
     const navigate = useNavigate();
     const [dateTime, setDateTime] = useState(new Date().toLocaleString());
     const [status, setStatus] = useState("");
-    const [countdown, setCountdown] = useState<number | null>(null);
-    const url = "http://localhost:8080";
+
+    const handleBack = () => {
+        navigate("/"); //
+    };
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -16,44 +19,33 @@ export const LoginPage: React.FC = () => {
         return () => clearInterval(timer);
     }, []);
 
-    useEffect(() => {
-        if (countdown === null) return;
-
-        if (countdown === 0) {
-            localStorage.setItem("isLoggedIn", "true");
-            navigate("/index");
-        }
-
-        const timer = setTimeout(() => {
-            setCountdown(prev => (prev !== null ? prev - 1 : null));
-        }, 1000);
-
-        return () => clearTimeout(timer);
-    }, [countdown, navigate]);
-
     const handleRecognize = async () => {
         try {
             const response = await fetch(url + "/api/recognizer/recognize");
             const name = await response.text();
-            if (response.ok && name) {
-                const login = await fetch(url + "/api/employee/login", {
+
+            if (response.ok && name && name.trim().length > 0) {
+                const currentTime = new Date().toISOString();
+
+                const checkin = await fetch(url + "/api/attendance/checkin", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
                         name: name.trim(),
+                        time: currentTime
                     })
                 });
-                const loginData = await login.json();
-                if (login.ok && loginData.name) {
-                    localStorage.setItem("isLoggedIn", "true");
-                    localStorage.setItem("userName", loginData.name); // Save name as token
-                    setStatus(`Recognized: ${loginData.name}`);
-                    setCountdown(5);
+
+                if (checkin.ok) {
+                    setStatus("Check in success: " + name + "\nTime: " + new Date(currentTime).toLocaleString())
+                } else {
+                    const errorText = await checkin.text();
+                    setStatus("Check-in failed: " + errorText);
                 }
             } else {
-                setStatus(`Not recognized: ${name}`);
+                setStatus("Not recognized: " + name);
             }
         } catch (error) {
             console.error(error);
@@ -63,15 +55,17 @@ export const LoginPage: React.FC = () => {
 
     return (
         <div className="login-container">
-            <h2>Login</h2>
+            <h2>Check-in</h2>
             <p className="datetime">{dateTime}</p>
             <button className="recognize-btn" onClick={handleRecognize}>Open Recognizer</button>
             {status && (
-                <p className="status-message" style={{ whiteSpace: "pre-line" }}>
+                <p className="status-message" style={{whiteSpace: "pre-line"}}>
                     {status}
-                    {countdown !== null && countdown > 0 && `\nRedirecting in ${countdown}...`}
                 </p>
             )}
+            <div className="back-button-container">
+                <button onClick={handleBack} className="back-button">← Back</button>
+            </div>
         </div>
     );
 };

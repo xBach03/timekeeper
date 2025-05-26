@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export const RegisterPage: React.FC = () => {
     const navigate = useNavigate();
 
-    const url = "http://localhost:8080/api";
+    const url = "http://localhost:8080";
 
     const handleBack = () => {
         navigate("/"); //
@@ -35,7 +35,7 @@ export const RegisterPage: React.FC = () => {
         };
 
         try {
-            const response = await fetch(url + "/employee/register", {
+            const response = await fetch(url + "/api/employee/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -44,7 +44,7 @@ export const RegisterPage: React.FC = () => {
             });
 
             if (response.ok) {
-                const response = await fetch(url + "/recognizer/register", {
+                const response = await fetch(url + "/api/recognizer/register", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

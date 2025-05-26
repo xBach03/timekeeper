@@ -11,15 +11,15 @@ export const NavigationPage: React.FC = () => {
                     <span className="nav-icon">✅</span>
                     <h2>Register</h2>
                 </Link>
-                <Link to="/check-in" className="nav-card">
+                <Link to="/checkin" className="nav-card">
                     <span className="nav-icon">🕒</span>
                     <h2>Check-In</h2>
                 </Link>
-                <Link to="/leave-request" className="nav-card">
+                <Link to="/checkout" className="nav-card">
                     <span className="nav-icon">🗓️</span>
-                    <h2>Request Leave</h2>
+                    <h2>Check out</h2>
                 </Link>
-                <Link to="/index" className="nav-card">
+                <Link to="/login" className="nav-card">
                     <span className="nav-icon">📋</span>
                     <h2>Index Page</h2>
                 </Link>

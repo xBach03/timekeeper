@@ -12,6 +12,8 @@ import { NavigationPage } from "./components/NavigationPage";
 import { IndexPage } from "./components/IndexPage";
 import { RegisterPage } from "./components/RegisterPage";
 import { LoginPage } from "./components/LoginPage";
+import { CheckInPage } from "./components/CheckInPage";
+import { CheckoutPage } from "./components/CheckoutPage";
 
 function RequireAuth({ children }: { children: JSX.Element }) {
     const location = useLocation();
@@ -27,6 +29,8 @@ function App() {
                 <Route path="/" element={<NavigationPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/checkin" element={<CheckInPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
                 <Route
                     path="/index"
                     element={
