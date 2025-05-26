@@ -82,7 +82,7 @@ public class FRIntegrationService {
             RecognizeResDto result = response.getBody();
             if (result.getStatus().equals("success")) {
                 log.info("Recognized {}", result.getName());
-                return "Recognized: " + result.getName();
+                return result.getName();
             } else {
                 log.error("Recognition failed: {}", result.getName());
                 return "Recognition failed: " + result.getName();

@@ -42,4 +42,10 @@ public class AttendanceEntity {
     @JoinColumn(name = "employee_id")
     @JsonBackReference(value = "employee-attendance")
     private EmployeeEntity employee;
+
+    @PrePersist
+    protected void onCreate() {
+        this.created = LocalDateTime.now();
+        this.updated = LocalDateTime.now();
+    }
 }

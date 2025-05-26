@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "leave_time")
@@ -21,14 +22,14 @@ public class LeaveTimeEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "start_date")
-    private LocalDateTime startDate;
+    @Column(name = "date")
+    private LocalDate date;
 
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
+    @Column(name = "start_hour")
+    private LocalTime startHour;
 
-    @Column(name = "total_hour")
-    private Short totalHour;
+    @Column(name = "end_hour")
+    private LocalTime endHour;
 
     @Column(name = "category")
     private String category;

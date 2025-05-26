@@ -28,7 +28,8 @@ public class TimekeeperApplication {
 											   LeaveTimeService leaveTimeService,
 											   ManagerService managerService,
 											   OvertimeService overtimeService,
-											   PayrollService payrollService) {
+											   PayrollService payrollService,
+											   EmployeeSessionService employeeSessionService) {
 		return args -> {
 			String[] title = new String[]{"Software Engineer", "Principal Engineer", "Software QA Engineer"};
 			String[] gender = new String[]{"male", "female"};
@@ -71,6 +72,10 @@ public class TimekeeperApplication {
 							.setManager(manager2);
 				}
 				employeeService.save(employee);
+				EmployeeSessionEntity employeeSessionEntity = new EmployeeSessionEntity()
+						.setEmployeeName("employee " + i)
+						.setStatus(Status.INACTIVE);
+				employeeSessionService.save(employeeSessionEntity);
 				OvertimeEntity overtime = new OvertimeEntity();
 				overtime.setApproval(Status.APPROVED)
 						.setEmployee(employee)
