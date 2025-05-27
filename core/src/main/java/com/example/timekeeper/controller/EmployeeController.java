@@ -54,14 +54,4 @@ public class EmployeeController {
     public ResponseEntity<LoginResDto> login(@RequestBody RecognizeReqDto loginReq) {
         return new ResponseEntity<>(employeeSessionService.login(loginReq.getName()), HttpStatus.OK);
     }
-
-    @GetMapping("/dashboard")
-    public ResponseEntity<DashBoardResDto> navigateToIndex(@RequestParam String name) {
-        DashBoardResDto dashBoardResDto = new DashBoardResDto();
-        dashBoardResDto.setBreakTime("1 hour")
-                .setShift(attendanceService.calculateCurrentShift(name))
-                .setLeaveRequests(attendanceService.calculatePendingApprovals(name) + " pending approval(s)")
-                .setNotifications(List.of("New policy update", "Shift change approved"));
-        return new ResponseEntity<>(dashBoardResDto, HttpStatus.OK);
-    }
 }

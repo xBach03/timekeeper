@@ -1,5 +1,6 @@
 package com.example.timekeeper.service;
 
+import com.example.timekeeper.constant.Status;
 import com.example.timekeeper.dto.AttendanceResDto;
 import com.example.timekeeper.dto.TimeCheckDto;
 import com.example.timekeeper.entity.AttendanceEntity;
@@ -106,6 +107,23 @@ public class AttendanceService {
         List<LeaveTimeEntity> leaveTimeList = leaveTimeRepository.findAllByEmployeeId(current.getId());
         return leaveTimeList.stream()
                 .filter(lt -> lt.getDate().isAfter(LocalDate.now()))
+                .filter(lt -> lt.getStatus().equals(Status.PENDING))
                 .count();
+    }
+
+    public List<AttendanceEntity> getPastWeekAttendance(String employeeName) {
+        LocalDate startDate = getPreviousMonday();
+        LocalDate endDate = getPreviousFriday();
+        return attendanceRepository.findLastWeekAttendance(employeeName, startDate, endDate);
+    }
+
+
+    private LocalDate getPreviousMonday() {
+        LocalDate today = LocalDate.now();
+        return today.with(java.time.DayOfWeek.MONDAY).minusWeeks(1);
+    }
+
+    private LocalDate getPreviousFriday() {
+        return getPreviousMonday().plusDays(4);
     }
 }
