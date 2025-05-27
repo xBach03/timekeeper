@@ -111,3 +111,66 @@
     background-color: #dc2626; /* darker red */
 }
 
+.charts {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+
+.chart-container {
+    flex: 1;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    height: 300px;
+    min-width: 300px;
+}
+
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.chart-container.pie {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+
+.pie-chart-wrapper {
+    flex: 1;
+    min-width: 0;
+}
+
+.pie-legend {
+    display: flex;
+    padding-top: 8rem;
+    padding-right: 10rem;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 120px;
+}
+
+.pie-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pie-legend-color {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+}
+
+
+
