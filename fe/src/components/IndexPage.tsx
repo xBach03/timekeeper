@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../assets/css/IndexPage.css";
 import { useNavigate } from "react-router-dom";
+import IndexLayout from "./IndexLayout";
 import {
     PieChart, Pie, Cell, Tooltip,
     BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer
@@ -104,99 +105,179 @@ export const IndexPage: React.FC = () => {
     };
 
     return (
-        <div className="layout">
-            <aside className="sidebar">
-                <h1 className="logo">Workday</h1>
-                <nav className="nav">
-                    <a href="#">Dashboard</a>
-                    <a href="#">Shifts</a>
-                    <a href="#">Requests</a>
-                    <a href="#">Settings</a>
-                </nav>
-            </aside>
+        <IndexLayout userName={userName}>
+            <h2>Today’s Schedule</h2>
+            <section className="cards">
+                <div className="card">
+                    <h3>Upcoming Shift</h3>
+                    <p>{dashboardData.shift}</p>
+                    <p className="sub">Break: {dashboardData.breakTime}</p>
+                </div>
 
-            <main className="main">
-                <header className="header">
-                    <h2>Today’s Schedule</h2>
-                    <div className="user">
-                        <span className="user-icon">👤</span>
-                        <span>{userName}</span>
-                        <button className="logout-button" onClick={handleLogout}>Logout</button>
-                    </div>
-                </header>
+                <div className="card">
+                    <h3>Leave Requests</h3>
+                    <p>{dashboardData.leaveRequests}</p>
+                </div>
 
-                <section className="cards">
-                    <div className="card">
-                        <h3>Upcoming Shift</h3>
-                        <p>{dashboardData.shift}</p>
-                        <p className="sub">Break: {dashboardData.breakTime}</p>
-                    </div>
+                <div className="card">
+                    <h3>Notifications</h3>
+                    <ul>
+                        {dashboardData.notifications.map((n, i) => (
+                            <li key={i}>{n}</li>
+                        ))}
+                    </ul>
+                </div>
+            </section>
+            <section className="charts">
+                <div className="chart-container">
+                    <h3>Weekly Attendance</h3>
+                    <ResponsiveContainer width="100%" height={250}>
+                        <BarChart data={Array.isArray(attendanceData) ? attendanceData : []}>
+                            <CartesianGrid strokeDasharray="3 3"/>
+                            <XAxis dataKey="date" tick={{fontSize: 14}}/>
+                            <YAxis tick={{fontSize: 14}}/>
+                            <Tooltip contentStyle={{fontSize: '14px'}}/>
+                            <Bar dataKey="hours" fill="#8884d8">
+                                {/* Optional: Add bar labels if needed */}
+                                {/* <LabelList dataKey="hours" position="top" style={{ fontSize: 12 }} /> */}
+                            </Bar>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
 
-                    <div className="card">
-                        <h3>Leave Requests</h3>
-                        <p>{dashboardData.leaveRequests}</p>
-                    </div>
-
-                    <div className="card">
-                        <h3>Notifications</h3>
-                        <ul>
-                            {dashboardData.notifications.map((n, i) => (
-                                <li key={i}>{n}</li>
-                            ))}
-                        </ul>
-                    </div>
-                </section>
-                <section className="charts">
-                    <div className="chart-container">
-                        <h3>Weekly Attendance</h3>
+                <div className="chart-container pie">
+                    <div className="pie-chart-wrapper">
+                        <h3>Leave Request Status</h3>
                         <ResponsiveContainer width="100%" height={250}>
-                            <BarChart data={Array.isArray(attendanceData) ? attendanceData : []}>
-                                <CartesianGrid strokeDasharray="3 3"/>
-                                <XAxis dataKey="date"/>
-                                <YAxis/>
+                            <PieChart>
+                                <Pie
+                                    data={leaveStatusData}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={80}
+                                    label
+                                >
+                                    {leaveStatusData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}/>
+                                    ))}
+                                </Pie>
                                 <Tooltip/>
-                                <Bar dataKey="hours" fill="#8884d8"/>
-                            </BarChart>
+                            </PieChart>
                         </ResponsiveContainer>
                     </div>
 
-                    <div className="chart-container pie">
-                        <div className="pie-chart-wrapper">
-                            <h3>Leave Request Status</h3>
-                            <ResponsiveContainer width="100%" height={250}>
-                                <PieChart>
-                                    <Pie
-                                        data={leaveStatusData}
-                                        dataKey="value"
-                                        nameKey="name"
-                                        cx="50%"
-                                        cy="50%"
-                                        outerRadius={80}
-                                        label
-                                    >
-                                        {leaveStatusData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}/>
-                                        ))}
-                                    </Pie>
-                                    <Tooltip/>
-                                </PieChart>
-                            </ResponsiveContainer>
-                        </div>
-
-                        <div className="pie-legend">
-                            {leaveStatusData.map((entry, index) => (
-                                <div key={entry.name} className="pie-legend-item">
-                                    <div
-                                        className="pie-legend-color"
-                                        style={{backgroundColor: COLORS[index % COLORS.length]}}
-                                    />
-                                    <span>{entry.name}</span>
-                                </div>
-                            ))}
-                        </div>
+                    <div className="pie-legend">
+                        {leaveStatusData.map((entry, index) => (
+                            <div key={entry.name} className="pie-legend-item">
+                                <div
+                                    className="pie-legend-color"
+                                    style={{backgroundColor: COLORS[index % COLORS.length]}}
+                                />
+                                <span>{entry.name}</span>
+                            </div>
+                        ))}
                     </div>
-                </section>
-            </main>
-        </div>
+                </div>
+            </section>
+        </IndexLayout>
+        // <div className="layout">
+        //     <aside className="sidebar">
+        //         <h1 className="logo">Workday</h1>
+        //         <nav className="nav">
+        //             <a href="/index">Dashboard</a>
+        //             <a href="#">Shifts</a>
+        //             <a href="/request_leave">Request Leave</a>
+        //             <a href="#">Settings</a>
+        //         </nav>
+        //     </aside>
+        //
+        //     <main className="main">
+        //         <header className="header">
+        //             <h2>Today’s Schedule</h2>
+        //             <div className="user">
+        //                 <span className="user-icon">👤</span>
+        //                 <span>{userName}</span>
+        //                 <button className="logout-button" onClick={handleLogout}>Logout</button>
+        //             </div>
+        //         </header>
+    // <section className="cards">
+    //     <div className="card">
+    //         <h3>Upcoming Shift</h3>
+    //         <p>{dashboardData.shift}</p>
+    //         <p className="sub">Break: {dashboardData.breakTime}</p>
+    //     </div>
+    //
+    //     <div className="card">
+    //         <h3>Leave Requests</h3>
+    //         <p>{dashboardData.leaveRequests}</p>
+    //     </div>
+    //
+    //     <div className="card">
+    //         <h3>Notifications</h3>
+    //         <ul>
+    //             {dashboardData.notifications.map((n, i) => (
+    //                 <li key={i}>{n}</li>
+    //             ))}
+    //         </ul>
+    //     </div>
+    // </section>
+    // <section className="charts">
+    //     <div className="chart-container">
+    //         <h3>Weekly Attendance</h3>
+    //         <ResponsiveContainer width="100%" height={250}>
+    //             <BarChart data={Array.isArray(attendanceData) ? attendanceData : []}>
+    //                 <CartesianGrid strokeDasharray="3 3" />
+    //                 <XAxis dataKey="date" tick={{ fontSize: 14 }} />
+    //                 <YAxis tick={{ fontSize: 14 }} />
+    //                 <Tooltip contentStyle={{ fontSize: '14px' }} />
+    //                 <Bar dataKey="hours" fill="#8884d8">
+    //                     {/* Optional: Add bar labels if needed */}
+    //                     {/* <LabelList dataKey="hours" position="top" style={{ fontSize: 12 }} /> */}
+    //                 </Bar>
+    //             </BarChart>
+    //         </ResponsiveContainer>
+    //     </div>
+    //
+    //     <div className="chart-container pie">
+    //         <div className="pie-chart-wrapper">
+    //             <h3>Leave Request Status</h3>
+    //             <ResponsiveContainer width="100%" height={250}>
+    //                 <PieChart>
+    //                     <Pie
+    //                         data={leaveStatusData}
+    //                         dataKey="value"
+    //                         nameKey="name"
+    //                         cx="50%"
+    //                         cy="50%"
+    //                         outerRadius={80}
+    //                         label
+    //                     >
+    //                         {leaveStatusData.map((entry, index) => (
+    //                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}/>
+    //                         ))}
+    //                     </Pie>
+    //                     <Tooltip/>
+    //                 </PieChart>
+    //             </ResponsiveContainer>
+    //         </div>
+    //
+    //         <div className="pie-legend">
+    //             {leaveStatusData.map((entry, index) => (
+    //                 <div key={entry.name} className="pie-legend-item">
+    //                     <div
+    //                         className="pie-legend-color"
+    //                         style={{backgroundColor: COLORS[index % COLORS.length]}}
+    //                     />
+    //                     <span>{entry.name}</span>
+    //                 </div>
+    //             ))}
+    //         </div>
+    //     </div>
+    // </section>
+
+        //     </main>
+        // </div>
     );
 };

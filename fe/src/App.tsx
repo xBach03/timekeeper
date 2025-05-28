@@ -14,6 +14,7 @@ import { RegisterPage } from "./components/RegisterPage";
 import { LoginPage } from "./components/LoginPage";
 import { CheckInPage } from "./components/CheckInPage";
 import { CheckoutPage } from "./components/CheckoutPage";
+import { RequestLeavePage } from "./components/RequestLeavePage";
 
 function RequireAuth({ children }: { children: JSX.Element }) {
     const location = useLocation();
@@ -39,6 +40,7 @@ function App() {
                         </RequireAuth>
                     }
                 />
+                <Route path="/request_leave" element={<RequestLeavePage/>} />
             </Routes>
         </Router>
     );

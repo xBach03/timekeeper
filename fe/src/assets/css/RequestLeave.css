@@ -1,0 +1,33 @@
+.leave-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    gap: 15px;
+}
+
+.leave-form label {
+    font-weight: 500;
+    color: #334155;
+}
+
+.leave-form input,
+.leave-form select,
+.leave-form .datepicker {
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.leave-form button {
+    padding: 10px 15px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.leave-form button:hover {
+    background-color: #2563eb;
+}

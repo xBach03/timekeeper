@@ -1,14 +1,12 @@
-/* Layout */
 .layout {
     display: flex;
     height: 100vh;
     font-family: Arial, sans-serif;
 }
 
-/* Sidebar */
 .sidebar {
     width: 240px;
-    background-color: #1e3a8a; /* Dark blue */
+    background-color: #1e3a8a;
     color: white;
     padding: 20px;
 }
@@ -22,7 +20,7 @@
 
 .nav a {
     display: block;
-    color: #cbd5e1; /* light slate */
+    color: #cbd5e1;
     text-decoration: none;
     margin-bottom: 20px;
     font-weight: 500;
@@ -33,11 +31,10 @@
     color: #ffffff;
 }
 
-/* Main Content */
 .main {
     flex-grow: 1;
     padding: 25px 30px;
-    background-color: #f1f5f9; /* light gray-blue */
+    background-color: #f1f5f9;
 }
 
 .header {
@@ -48,10 +45,11 @@
 }
 
 .header h2 {
-    color: #1e293b; /* dark slate */
+    color: #1e293b;
 }
 
 .user {
+    margin-left: auto;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -65,10 +63,9 @@
     gap: 24px;
 }
 
-/* Card Style */
 .card {
     background-color: white;
-    border-left: 5px solid #3b82f6; /* Blue border accent */
+    border-left: 5px solid #3b82f6;
     border-radius: 10px;
     padding: 18px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -98,7 +95,7 @@
 .logout-button {
     margin-left: 12px;
     padding: 6px 12px;
-    background-color: #ef4444; /* red */
+    background-color: #ef4444;
     color: white;
     border: none;
     border-radius: 5px;
@@ -108,7 +105,7 @@
 }
 
 .logout-button:hover {
-    background-color: #dc2626; /* darker red */
+    background-color: #dc2626;
 }
 
 .charts {
