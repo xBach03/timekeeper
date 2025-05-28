@@ -12,6 +12,7 @@ import com.example.timekeeper.repository.LeaveTimeRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -126,4 +127,24 @@ public class AttendanceService {
     private LocalDate getPreviousFriday() {
         return getPreviousMonday().plusDays(4);
     }
+
+    public String formatWithOrdinalSuffix(LocalDate date) {
+        int day = date.getDayOfMonth();
+        String suffix;
+
+        if (day >= 11 && day <= 13) {
+            suffix = "th";
+        } else {
+            switch (day % 10) {
+                case 1: suffix = "st"; break;
+                case 2: suffix = "nd"; break;
+                case 3: suffix = "rd"; break;
+                default: suffix = "th";
+            }
+        }
+
+        DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM");
+        return date.getDayOfWeek().toString().substring(0, 3) + " (" + date.format(monthFormatter) + " " + day + suffix + ")";
+    }
+
 }

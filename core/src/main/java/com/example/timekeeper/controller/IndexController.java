@@ -65,8 +65,12 @@ public class IndexController {
         List<AttendanceEntity> attendanceList = attendanceService.getPastWeekAttendance(name);
 
         List<WeeklyAttendanceDto> chartData = attendanceList.stream()
-                .map(a -> new WeeklyAttendanceDto(a.getDate().getDayOfWeek().toString().substring(0, 3),
-                        a.getCheckIn() != null && a.getCheckOut() != null ? Duration.between(a.getCheckIn(), a.getCheckOut()).toHours() : 0))
+                .map(a -> new WeeklyAttendanceDto(
+                        attendanceService.formatWithOrdinalSuffix(a.getDate()),
+                        a.getCheckIn() != null && a.getCheckOut() != null
+                                ? Duration.between(a.getCheckIn(), a.getCheckOut()).toHours()
+                                : 0
+                ))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(chartData);
