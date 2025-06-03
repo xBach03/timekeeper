@@ -26,8 +26,42 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    margin-top: 1.5rem;
 }
 
 .leave-form button:hover {
     background-color: #2563eb;
 }
+
+h2 {
+    padding-top: 1rem;
+    margin: 0;
+}
+
+.react-datepicker__day--highlighted,
+.highlight {
+    background-color: #4DA8DA;
+    color: black;
+    border-radius: 50%;
+}
+
+.leave-container {
+    display: flex;
+    gap: 5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.leave-form {
+    flex: 1;
+    padding-top: 2.7rem;
+    min-width: 20rem;
+    padding-right: 4rem;
+}
+
+.leave-calendar {
+    flex: 1;
+    min-width: 20rem;
+}
+
+
