@@ -47,4 +47,11 @@ public class LeaveTimeService {
                         .setCategory(leaveReqDto.getCategory())
         );
     }
+
+    public List<LeaveTimeEntity> getMonthlyDayoffs(String name) {
+        List<LeaveTimeEntity> leaveTimeList = leaveTimeRepository.findAllByEmployeeName(name);
+        return leaveTimeList.stream()
+                .filter(lt -> lt.getDate().getMonth().equals(LocalDate.now().getMonth()))
+                .collect(Collectors.toList());
+    }
 }

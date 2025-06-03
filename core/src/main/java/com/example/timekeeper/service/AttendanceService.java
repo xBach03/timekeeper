@@ -40,14 +40,20 @@ public class AttendanceService {
     public AttendanceResDto checkIn(TimeCheckDto checkInDto) {
         EmployeeEntity current = employeeRepository.findByName(checkInDto.getName());
         ZonedDateTime zonedDateTime = checkInDto.getTime().atZoneSameInstant(ZoneId.systemDefault());
-        AttendanceEntity attendanceEntity = new AttendanceEntity()
-                .setEmployee(current)
-                .setCheckIn(zonedDateTime.toLocalTime())
-                .setDate(zonedDateTime.toLocalDate());
-        AttendanceEntity saved = attendanceRepository.save(attendanceEntity);
+        AttendanceEntity timeRecord = attendanceRepository.findByEmployeeAndDate(current, zonedDateTime.toLocalDate());
+        if (Objects.nonNull(timeRecord)) {
+            timeRecord.setCheckIn(zonedDateTime.toLocalTime());
+            attendanceRepository.save(timeRecord);
+        } else {
+            AttendanceEntity attendanceEntity = new AttendanceEntity()
+                    .setEmployee(current)
+                    .setCheckIn(zonedDateTime.toLocalTime())
+                    .setDate(zonedDateTime.toLocalDate());
+            AttendanceEntity saved = attendanceRepository.save(attendanceEntity);
+        }
         return new AttendanceResDto()
-                .setDate(saved.getDate())
-                .setTime(saved.getCheckIn())
+                .setDate(zonedDateTime.toLocalDate())
+                .setTime(zonedDateTime.toLocalTime())
                 .setName(current.getName());
     }
 
