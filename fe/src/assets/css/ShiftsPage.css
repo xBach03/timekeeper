@@ -1,0 +1,48 @@
+.shifts-container {
+    background-color: #F8FAFC;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    max-width: 700px;
+    margin: 0 auto;
+    margin-top: 2rem;
+}
+
+.shifts-title {
+    font-size: 1.8rem;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+}
+
+.loading,
+.no-shifts {
+    color: #64748b;
+    font-style: italic;
+}
+
+.shift-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.shift-item {
+    padding: 1rem;
+    border-left: 4px solid #3b82f6;
+    background-color: #D9EAFD;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.shift-date {
+    font-weight: bold;
+    color: #1e293b;
+}
+
+.shift-time,
+.shift-location {
+    color: #475569;
+    font-size: 0.95rem;
+}

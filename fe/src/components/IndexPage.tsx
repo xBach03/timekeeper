@@ -106,7 +106,7 @@ export const IndexPage: React.FC = () => {
 
     return (
         <IndexLayout userName={userName}>
-            <h2>Today’s Schedule</h2>
+            <h2 className="dashboardTitle">Today’s Schedule</h2>
             <section className="cards">
                 <div className="card">
                     <h3>Upcoming Shift</h3>

@@ -33,6 +33,10 @@
     color: #ffffff;
 }
 
+.dashboardTitle {
+    padding-bottom: 2rem;
+}
+
 .main {
     flex-grow: 1;
     padding: 1.5rem 2rem;

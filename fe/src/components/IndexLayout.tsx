@@ -19,12 +19,12 @@ const IndexLayout: React.FC<Props> = ({ userName, children }) => {
     return (
         <div className="layout">
             <aside className="sidebar">
-                <h1 className="logo">Workday</h1>
+                <h1 className="logo">Workday 💼</h1>
                 <nav className="nav">
-                    <a href="/index">Dashboard</a>
-                    <a href="#">Shifts</a>
-                    <a href="/request_leave">Request Leave</a>
-                    <a href="#">Settings</a>
+                    <a href="/index">Dashboard 📊</a>
+                    <a href="/shifts">Shifts 🗓️</a>
+                    <a href="/request_leave">Request Leave 📃</a>
+                    <a href="#">Settings ⚙️</a>
                 </nav>
             </aside>
 
