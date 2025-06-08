@@ -2,6 +2,7 @@ package com.example.timekeeper.service;
 
 import com.example.timekeeper.constant.Status;
 import com.example.timekeeper.dto.AttendanceResDto;
+import com.example.timekeeper.dto.ShiftDto;
 import com.example.timekeeper.dto.TimeCheckDto;
 import com.example.timekeeper.entity.AttendanceEntity;
 import com.example.timekeeper.entity.EmployeeEntity;
@@ -9,14 +10,16 @@ import com.example.timekeeper.entity.LeaveTimeEntity;
 import com.example.timekeeper.repository.AttendanceRepository;
 import com.example.timekeeper.repository.EmployeeRepository;
 import com.example.timekeeper.repository.LeaveTimeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
@@ -121,7 +124,7 @@ public class AttendanceService {
     public List<AttendanceEntity> getPastWeekAttendance(String employeeName) {
         LocalDate startDate = getPreviousMonday();
         LocalDate endDate = getPreviousFriday();
-        return attendanceRepository.findLastWeekAttendance(employeeName, startDate, endDate);
+        return attendanceRepository.findWeeklyAttendance(employeeName, startDate, endDate);
     }
 
 
@@ -151,6 +154,45 @@ public class AttendanceService {
 
         DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM");
         return date.getDayOfWeek().toString().substring(0, 3) + " (" + date.format(monthFormatter) + " " + day + suffix + ")";
+    }
+
+    public List<ShiftDto> getWeeklyShifts(String name) {
+        LocalDate startDate = LocalDate.now().with(DayOfWeek.MONDAY);
+        LocalDate endDate = startDate.plusDays(4);
+        List<LeaveTimeEntity> leaves = leaveTimeRepository.findWeeklyLeaves(name, startDate, endDate, Status.APPROVED);
+        // Group leaves by date for quick lookup
+        Map<LocalDate, List<LeaveTimeEntity>> leaveMap = leaves.stream()
+                .collect(Collectors.groupingBy(LeaveTimeEntity::getDate));
+
+        List<ShiftDto> shifts = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++) {
+            LocalDate date = startDate.plusDays(i);
+            LocalTime shiftStart = LocalTime.of(8, 30);
+            LocalTime shiftEnd = LocalTime.of(17, 30);
+
+            List<LeaveTimeEntity> dailyLeaves = leaveMap.getOrDefault(date, Collections.emptyList());
+
+            // If leave fully covers the day, skip shift
+            boolean fullyCovered = dailyLeaves.stream().anyMatch(l ->
+                    !l.getStartHour().isAfter(shiftStart) && !l.getEndHour().isBefore(shiftEnd)
+            );
+
+            if (fullyCovered) {
+                continue;
+            }
+
+            // Optionally adjust shift hours if partial leave (skipped here for simplicity)
+            // For now, just keep default shift even if partially on leave
+
+            shifts.add(new ShiftDto()
+                    .setDate(date)
+                    .setTime(String.format("%02d:%02d - %02d:%02d", shiftStart.getHour(), shiftStart.getMinute(), shiftEnd.getHour(), shiftEnd.getMinute()))
+                    .setLocation("Main Office"));
+        }
+        log.info("Shifts: {}", shifts);
+
+        return shifts;
     }
 
 }

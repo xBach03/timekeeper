@@ -18,7 +18,7 @@ public interface AttendanceRepository extends JpaRepository<AttendanceEntity,Lon
             "WHERE a.employee.name = :name " +
             "AND a.date BETWEEN :startDate AND :endDate " +
             "ORDER BY a.date ASC")
-    List<AttendanceEntity> findLastWeekAttendance(
+    List<AttendanceEntity> findWeeklyAttendance(
             @Param("name") String name,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate

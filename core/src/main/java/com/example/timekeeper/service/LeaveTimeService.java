@@ -52,6 +52,7 @@ public class LeaveTimeService {
         List<LeaveTimeEntity> leaveTimeList = leaveTimeRepository.findAllByEmployeeName(name);
         return leaveTimeList.stream()
                 .filter(lt -> lt.getDate().getMonth().equals(LocalDate.now().getMonth()))
+                .filter(lt -> lt.getStatus().equalsIgnoreCase(Status.APPROVED))
                 .collect(Collectors.toList());
     }
 }

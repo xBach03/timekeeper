@@ -1,14 +1,14 @@
 package com.example.timekeeper.controller;
 
 import com.example.timekeeper.dto.AttendanceResDto;
+import com.example.timekeeper.dto.ShiftDto;
 import com.example.timekeeper.dto.TimeCheckDto;
 import com.example.timekeeper.service.AttendanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/attendance")
@@ -35,4 +35,10 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceResDto);
     }
 
+    @GetMapping("/shifts")
+    public ResponseEntity<List<ShiftDto>> calcShifts(@RequestParam String name) {
+        log.info("Getting shifts for {}", name);
+        log.info("Shifts {}", attendanceService.getWeeklyShifts(name));
+        return ResponseEntity.ok(attendanceService.getWeeklyShifts(name));
+    }
 }
