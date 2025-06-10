@@ -62,7 +62,7 @@ public class IndexController {
 
     @GetMapping("/weekly-attendance")
     public ResponseEntity<List<WeeklyAttendanceDto>> getWeeklyAttendance(@RequestParam String name) {
-        List<AttendanceEntity> attendanceList = attendanceService.getPastWeekAttendance(name);
+        List<AttendanceEntity> attendanceList = attendanceService.getWeeklyAttendance(name);
 
         List<WeeklyAttendanceDto> chartData = attendanceList.stream()
                 .map(a -> new WeeklyAttendanceDto(

@@ -35,7 +35,7 @@ public class LeaveTimeController {
         List<String> dates = leaveTimeList.stream()
                 .map(entity -> entity.getDate().toString())
                 .collect(Collectors.toList());
-
+        log.info("Leaves: {}", dates);
         return ResponseEntity.ok(dates);
     }
 }

@@ -121,20 +121,20 @@ public class AttendanceService {
                 .count();
     }
 
-    public List<AttendanceEntity> getPastWeekAttendance(String employeeName) {
-        LocalDate startDate = getPreviousMonday();
-        LocalDate endDate = getPreviousFriday();
+    public List<AttendanceEntity> getWeeklyAttendance(String employeeName) {
+        LocalDate startDate = getCurrentWeekMonday();
+        LocalDate endDate = getCurrentWeekFriday();
         return attendanceRepository.findWeeklyAttendance(employeeName, startDate, endDate);
     }
 
 
-    private LocalDate getPreviousMonday() {
+    private LocalDate getCurrentWeekMonday() {
         LocalDate today = LocalDate.now();
-        return today.with(java.time.DayOfWeek.MONDAY).minusWeeks(1);
+        return today.with(java.time.DayOfWeek.MONDAY);
     }
 
-    private LocalDate getPreviousFriday() {
-        return getPreviousMonday().plusDays(4);
+    private LocalDate getCurrentWeekFriday() {
+        return getCurrentWeekMonday().plusDays(4);
     }
 
     public String formatWithOrdinalSuffix(LocalDate date) {
@@ -160,39 +160,70 @@ public class AttendanceService {
         LocalDate startDate = LocalDate.now().with(DayOfWeek.MONDAY);
         LocalDate endDate = startDate.plusDays(4);
         List<LeaveTimeEntity> leaves = leaveTimeRepository.findWeeklyLeaves(name, startDate, endDate, Status.APPROVED);
-        // Group leaves by date for quick lookup
+
         Map<LocalDate, List<LeaveTimeEntity>> leaveMap = leaves.stream()
                 .collect(Collectors.groupingBy(LeaveTimeEntity::getDate));
 
         List<ShiftDto> shifts = new ArrayList<>();
 
+        LocalTime shiftStart = LocalTime.of(8, 30);
+        LocalTime shiftEnd = LocalTime.of(17, 30);
+
         for (int i = 0; i < 5; i++) {
             LocalDate date = startDate.plusDays(i);
-            LocalTime shiftStart = LocalTime.of(8, 30);
-            LocalTime shiftEnd = LocalTime.of(17, 30);
-
             List<LeaveTimeEntity> dailyLeaves = leaveMap.getOrDefault(date, Collections.emptyList());
 
-            // If leave fully covers the day, skip shift
-            boolean fullyCovered = dailyLeaves.stream().anyMatch(l ->
-                    !l.getStartHour().isAfter(shiftStart) && !l.getEndHour().isBefore(shiftEnd)
-            );
+            // Start with full shift interval
+            LocalTime currentShiftStart = shiftStart;
+            LocalTime currentShiftEnd = shiftEnd;
 
-            if (fullyCovered) {
+            // Remove leave intervals from shift
+            for (LeaveTimeEntity leave : dailyLeaves) {
+                LocalTime leaveStart = leave.getStartHour();
+                LocalTime leaveEnd = leave.getEndHour();
+
+                // If leave fully covers shift, skip
+                if (!leaveStart.isAfter(currentShiftStart) && !leaveEnd.isBefore(currentShiftEnd)) {
+                    currentShiftStart = null; // no shift today
+                    break;
+                }
+
+                // If leave overlaps beginning of shift, adjust shift start
+                if (!leaveStart.isAfter(currentShiftStart) && leaveEnd.isAfter(currentShiftStart) && leaveEnd.isBefore(currentShiftEnd)) {
+                    currentShiftStart = leaveEnd;
+                }
+
+                // If leave overlaps end of shift, adjust shift end
+                if (leaveStart.isAfter(currentShiftStart) && leaveStart.isBefore(currentShiftEnd) && !leaveEnd.isBefore(currentShiftEnd)) {
+                    currentShiftEnd = leaveStart;
+                }
+
+                // If leave is inside shift, split shifts — for simplicity, just shorten shift to before leave
+                if (leaveStart.isAfter(currentShiftStart) && leaveEnd.isBefore(currentShiftEnd)) {
+                    // To handle split shifts, you'd need multiple ShiftDto per day
+                    // For now, just shorten shift to before leave start
+                    currentShiftEnd = leaveStart;
+                }
+            }
+
+            if (currentShiftStart == null || !currentShiftStart.isBefore(currentShiftEnd)) {
+                // no working hours today (fully covered by leave)
                 continue;
             }
 
-            // Optionally adjust shift hours if partial leave (skipped here for simplicity)
-            // For now, just keep default shift even if partially on leave
+            String timeRange = String.format("%02d:%02d - %02d:%02d",
+                    currentShiftStart.getHour(), currentShiftStart.getMinute(),
+                    currentShiftEnd.getHour(), currentShiftEnd.getMinute());
 
             shifts.add(new ShiftDto()
                     .setDate(date)
-                    .setTime(String.format("%02d:%02d - %02d:%02d", shiftStart.getHour(), shiftStart.getMinute(), shiftEnd.getHour(), shiftEnd.getMinute()))
+                    .setTime(timeRange)
                     .setLocation("Main Office"));
         }
-        log.info("Shifts: {}", shifts);
 
+        log.info("Shifts: {}", shifts);
         return shifts;
     }
+
 
 }
