@@ -225,5 +225,8 @@ public class AttendanceService {
         return shifts;
     }
 
+    public AttendanceEntity getTodayAttendance(String name) {
+        return attendanceRepository.findByEmployeeNameAndDate(name, LocalDate.now());
+    }
 
 }

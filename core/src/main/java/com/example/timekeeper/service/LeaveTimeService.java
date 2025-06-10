@@ -9,6 +9,7 @@ import com.example.timekeeper.repository.LeaveTimeRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,4 +56,9 @@ public class LeaveTimeService {
                 .filter(lt -> lt.getStatus().equalsIgnoreCase(Status.APPROVED))
                 .collect(Collectors.toList());
     }
+
+    public boolean isFullDay(LocalTime start, LocalTime end) {
+        return start.equals(LocalTime.of(8, 30)) && end.equals(LocalTime.of(17, 30));
+    }
+
 }

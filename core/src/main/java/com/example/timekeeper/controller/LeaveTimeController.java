@@ -8,7 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,13 +32,25 @@ public class LeaveTimeController {
     }
 
     @GetMapping("/upcoming")
-    public ResponseEntity<List<String>> upcomingLeave(@RequestParam String name) {
+    public ResponseEntity<List<Map<String, Object>>> upcomingLeave(@RequestParam String name) {
         List<LeaveTimeEntity> leaveTimeList = leaveTimeService.getMonthlyDayoffs(name);
 
-        List<String> dates = leaveTimeList.stream()
-                .map(entity -> entity.getDate().toString())
-                .collect(Collectors.toList());
-        log.info("Leaves: {}", dates);
-        return ResponseEntity.ok(dates);
+        List<Map<String, Object>> result = leaveTimeList.stream().map(entity -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("date", entity.getDate().toString());
+
+            boolean fullDay = leaveTimeService.isFullDay(entity.getStartHour(), entity.getEndHour());
+            map.put("fullDay", fullDay);
+
+            String hours = entity.getStartHour().toString() + " - " + entity.getEndHour().toString();
+            map.put("hours", hours);
+            map.put("hoursNum", Duration.between(entity.getStartHour(), entity.getEndHour()).toMinutes() / 60);
+            return map;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(result);
     }
+
+
+
 }

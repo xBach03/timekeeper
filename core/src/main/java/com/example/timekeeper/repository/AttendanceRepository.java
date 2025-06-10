@@ -23,4 +23,6 @@ public interface AttendanceRepository extends JpaRepository<AttendanceEntity,Lon
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate
     );
+
+    AttendanceEntity findByEmployeeNameAndDate(String name, LocalDate date);
 }
