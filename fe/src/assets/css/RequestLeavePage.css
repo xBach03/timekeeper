@@ -68,3 +68,36 @@ h2 {
     height: 100vh;
 }
 
+.leave-warning {
+    margin-top: 0.5rem;
+    color: #f97316;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: unset;
+}
+
+.density-high {
+    background-color: #1e3a8a !important;
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.density-medium {
+    background-color: #3b82f6 !important;
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.density-low {
+    background-color: #93c5fd !important;
+    color: black;
+    border-radius: 50%;
+}
+
+
+
+
+

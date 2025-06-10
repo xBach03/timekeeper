@@ -15,6 +15,7 @@ import { LoginPage } from "./components/LoginPage";
 import { CheckInPage } from "./components/CheckInPage";
 import { CheckoutPage } from "./components/CheckoutPage";
 import { RequestLeavePage } from "./components/RequestLeavePage";
+import { TodayProgressPage } from "./components/TodayProgressPage";
 import ShiftsPage from "./components/ShiftsPage";
 
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/checkin" element={<CheckInPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/shifts" element={<ShiftsPage/>} />
+                <Route path="/today_progress" element={<TodayProgressPage/>} />
                 <Route
                     path="/index"
                     element={

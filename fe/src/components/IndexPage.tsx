@@ -34,6 +34,15 @@ export const IndexPage: React.FC = () => {
         leaveRequests: "",
         notifications: []
     });
+
+    const WEEK_DAYS: WeeklyAttendanceData[] = [
+        { date: 'Mon', hours: 0 },
+        { date: 'Tue', hours: 0 },
+        { date: 'Wed', hours: 0 },
+        { date: 'Thu', hours: 0 },
+        { date: 'Fri', hours: 0 },
+    ];
+
     const COLORS = ['#0088FE', '#00C49F', '#FF8042'];
 
     const [leaveStatusData, setLeaveStatusData] = useState<LeaveStatusData[]>([]);
@@ -77,25 +86,34 @@ export const IndexPage: React.FC = () => {
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {
-                    setAttendanceData(data);
+                    const parseDay = (label: string): string => {
+                        const match = label.match(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)/i);
+                        return match ? match[0].charAt(0).toUpperCase() + match[0].slice(1).toLowerCase() : '';
+                    };
+
+                    const rawMap = new Map(
+                        data.map((d: WeeklyAttendanceData) => {
+                            const day = parseDay(d.date);
+                            return [day, { hours: d.hours, label: d.date }];
+                        })
+                    );
+
+                    const normalized = WEEK_DAYS.map(day => {
+                        const entry = rawMap.get(day.date);
+                        return {
+                            date: entry?.label || `${day.date} (N/A)`,
+                            hours: entry?.hours || 0
+                        };
+                    });
+
+                    setAttendanceData(normalized);
                 } else {
-                    // fallback in case of bad API response
-                    setAttendanceData([
-                        { date: 'Mon', hours: 8 },
-                        { date: 'Tue', hours: 7.5 },
-                        { date: 'Wed', hours: 0 },
-                        { date: 'Thu', hours: 8 },
-                        { date: 'Fri', hours: 6 }
-                    ]);
+                    setAttendanceData(WEEK_DAYS.map(d => ({
+                        date: `${d.date} (N/A)`,
+                        hours: 0
+                    })));
                 }
             })
-            .catch(() => setAttendanceData([
-                { date: 'Mon', hours: 8 },
-                { date: 'Tue', hours: 7.5 },
-                { date: 'Wed', hours: 0 },
-                { date: 'Thu', hours: 8 },
-                { date: 'Fri', hours: 6 }
-            ]));
     }, []);
 
     const handleLogout = () => {

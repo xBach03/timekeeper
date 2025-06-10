@@ -25,6 +25,7 @@ const IndexLayout: React.FC<Props> = ({ userName, children }) => {
                     <a href="/index">Dashboard 📊</a>
                     <a href="/shifts">Shifts 🗓️</a>
                     <a href="/request_leave">Request Leave 📃</a>
+                    <a href="/today_progress">Today Progress 📈</a>
                     <a href="#">Settings ⚙️</a>
                 </nav>
             </aside>

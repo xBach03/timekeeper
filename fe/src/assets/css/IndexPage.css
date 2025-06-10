@@ -43,6 +43,7 @@
     background-color: #f1f5f9;
     box-sizing: border-box;
     min-width: 0;
+    min-height: 100vh;
 }
 
 .header {
