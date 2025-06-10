@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/IndexPage.css";
+import { useEffect, useRef } from "react";
 
 interface Props {
     userName: string;
@@ -41,5 +42,8 @@ const IndexLayout: React.FC<Props> = ({ userName, children }) => {
         </div>
     );
 };
+
+
+
 
 export default IndexLayout;

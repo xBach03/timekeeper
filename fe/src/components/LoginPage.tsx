@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import npReact, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/LoginPage.css";
 
 export const LoginPage: React.FC = () => {
+    const handleBack = () => {
+        navigate("/"); //
+    };
     const navigate = useNavigate();
     const [dateTime, setDateTime] = useState(new Date().toLocaleString());
     const [status, setStatus] = useState("");
@@ -67,11 +70,14 @@ export const LoginPage: React.FC = () => {
             <p className="datetime">{dateTime}</p>
             <button className="recognize-btn" onClick={handleRecognize}>Open Recognizer</button>
             {status && (
-                <p className="status-message" style={{ whiteSpace: "pre-line" }}>
+                <p className="status-message" style={{whiteSpace: "pre-line"}}>
                     {status}
                     {countdown !== null && countdown > 0 && `\nRedirecting in ${countdown}...`}
                 </p>
             )}
+            <div className="back-button-container">
+                <button onClick={handleBack} className="back-button">← Back</button>
+            </div>
         </div>
     );
 };

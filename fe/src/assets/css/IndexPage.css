@@ -1,7 +1,8 @@
 .layout {
     display: flex;
-    height: 130vh;
+    height: fit-content;
     font-family: Arial, sans-serif;
+    align-items: stretch;
     position: relative;
 }
 
@@ -10,7 +11,6 @@
     background-color: #1e3a8a;
     color: white;
     padding: 20px;
-    transition: left 0.3s ease;
 }
 
 .logo {
@@ -41,6 +41,8 @@
     flex-grow: 1;
     padding: 1.5rem 2rem;
     background-color: #f1f5f9;
+    box-sizing: border-box;
+    min-width: 0;
 }
 
 .header {

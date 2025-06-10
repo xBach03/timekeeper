@@ -6,6 +6,7 @@
     max-width: 700px;
     margin: 0 auto;
     margin-top: 2rem;
+    box-sizing: border-box;
 }
 
 .shifts-title {

@@ -61,7 +61,7 @@ export const RequestLeavePage: React.FC = () => {
 
     return (
         <IndexLayout userName={userName}>
-            <div className="main" style={{padding: "30px"}}>
+            <div className="leave_main" style={{padding: "30px"}}>
                 <h2>Request Leave</h2>
                 <div className="leave-container">
                     <form className="leave-form" onSubmit={handleSubmit}>
