@@ -23,6 +23,7 @@ interface LeaveStatusData {
 interface WeeklyAttendanceData {
     date: string;   // e.g., "Mon", "Tue"
     hours: number;
+    key: string;
 }
 
 export const IndexPage: React.FC = () => {
@@ -35,13 +36,26 @@ export const IndexPage: React.FC = () => {
         notifications: []
     });
 
-    const WEEK_DAYS: WeeklyAttendanceData[] = [
-        { date: 'Mon', hours: 0 },
-        { date: 'Tue', hours: 0 },
-        { date: 'Wed', hours: 0 },
-        { date: 'Thu', hours: 0 },
-        { date: 'Fri', hours: 0 },
-    ];
+    const getCurrentWeekLabels = (): WeeklyAttendanceData[] => {
+        const today = new Date();
+        const day = today.getDay();
+        const monday = new Date(today);
+        monday.setDate(today.getDate() - ((day + 6) % 7));
+
+        const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+
+        return weekdays.map((dayLabel, i) => {
+            const d = new Date(monday);
+            d.setDate(monday.getDate() + i);
+            return {
+                date: `${dayLabel} ${d.getDate()}`,  // used for label
+                key: dayLabel,                       // used for lookup
+                hours: 0
+            } as any;
+        });
+    };
+
+    const WEEK_DAYS: WeeklyAttendanceData[] = getCurrentWeekLabels();
 
     const COLORS = ['#0088FE', '#00C49F', '#FF8042'];
 
@@ -99,16 +113,19 @@ export const IndexPage: React.FC = () => {
                     );
 
                     const normalized = WEEK_DAYS.map(day => {
-                        const entry = rawMap.get(day.date);
+                        const entry = rawMap.get(day.key); // use 'Mon', 'Tue', etc.
                         return {
-                            date: entry?.label || `${day.date} (N/A)`,
+                            key: day.key,
+                            date: day.date,                 // keep label like 'Mon 17'
                             hours: entry?.hours || 0
                         };
                     });
 
+
                     setAttendanceData(normalized);
                 } else {
                     setAttendanceData(WEEK_DAYS.map(d => ({
+                        key: d.key,
                         date: `${d.date} (N/A)`,
                         hours: 0
                     })));

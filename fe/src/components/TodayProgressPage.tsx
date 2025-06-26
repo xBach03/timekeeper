@@ -71,7 +71,7 @@ export const TodayProgressPage: React.FC = () => {
         const start = new Date(`1970-01-01T${checkIn}:00`);
         const end = new Date(`1970-01-01T${checkOut}:00`);
         const diffMs = end.getTime() - start.getTime();
-        const hours = Math.floor(diffMs / 1000 / 60 / 60);
+        const hours = Math.floor(diffMs / 1000 / 60 / 60) - 1;
         const minutes = Math.floor((diffMs / 1000 / 60) % 60);
         return `${hours}h ${minutes}m`;
     };
@@ -96,16 +96,15 @@ export const TodayProgressPage: React.FC = () => {
                         <p><strong>📅 Date:</strong> {data.date}</p>
                         <p><strong>🟢 Check-in:</strong> {data.checkIn || "Not yet checked in"}</p>
                         <p><strong>🔴 Check-out:</strong> {data.checkOut || "Not yet checked out"}</p>
+                        <p><strong>☕ Break:</strong> 1 hour</p>
 
                         {data.checkIn && data.checkOut && (
                             <p><strong>⏳ Duration:</strong> {calculateDuration(data.checkIn, data.checkOut)}</p>
                         )}
 
                         <div className="progress-bar">
-                            <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
+                            <div className="progress-fill" style={{width: `${progressPercent}%`}}/>
                         </div>
-
-                        <p><strong>🔥 Streak:</strong> {data.streak} day{data.streak !== 1 ? "s" : ""}</p>
 
                         <div className="check-buttons">
                             <button

@@ -17,6 +17,8 @@ import { CheckoutPage } from "./components/CheckoutPage";
 import { RequestLeavePage } from "./components/RequestLeavePage";
 import { TodayProgressPage } from "./components/TodayProgressPage";
 import ShiftsPage from "./components/ShiftsPage";
+import PayrollPage from "./components/PayrollPage";
+import OTLoggingPage from "./components/OTLoggingPage";
 
 function RequireAuth({ children }: { children: JSX.Element }) {
     const location = useLocation();
@@ -36,6 +38,8 @@ function App() {
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/shifts" element={<ShiftsPage/>} />
                 <Route path="/today_progress" element={<TodayProgressPage/>} />
+                <Route path="/payroll" element={<PayrollPage/>} />
+                <Route path="/ot_logging" element={<OTLoggingPage/>} />
                 <Route
                     path="/index"
                     element={

@@ -1,0 +1,21 @@
+/* Payroll Page Styles */
+.card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: #334155;
+}
+
+.card table th,
+.card table td {
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+.card table th {
+    background-color: #f8fafc;
+    color: #1e293b;
+    font-weight: 600;
+}

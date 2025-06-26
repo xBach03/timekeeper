@@ -12,6 +12,18 @@ const IndexLayout: React.FC<Props> = ({ userName, children }) => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
+        const name = localStorage.getItem("userName") || "Unknown"
+        fetch(`http://localhost:8080/api/employee/logout?name=${name}`)
+            .then(res => {
+                if (res.ok) {
+                    // Optional: clear localStorage or redirect to login
+                    localStorage.removeItem("userName");
+                } else {
+                    alert("Logout failed");
+                }
+            })
+            .catch(() => alert("Network error during logout"));
+
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("userName");
         navigate("/");
@@ -26,6 +38,8 @@ const IndexLayout: React.FC<Props> = ({ userName, children }) => {
                     <a href="/shifts">Shifts 🗓️</a>
                     <a href="/request_leave">Request Leave 📃</a>
                     <a href="/today_progress">Today Progress 📈</a>
+                    <a href="/payroll">Payroll 📋</a>
+                    <a href="/ot_logging">OT Logging ⏳</a>
                     <a href="#">Settings ⚙️</a>
                 </nav>
             </aside>

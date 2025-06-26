@@ -1,0 +1,68 @@
+/* OT Logging Page Styles */
+form.card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+form.card label {
+    font-size: 0.95rem;
+    color: #1e293b;
+    display: flex;
+    flex-direction: column;
+}
+
+form.card input[type="date"],
+form.card input[type="number"] {
+    margin-top: 4px;
+    padding: 8px;
+    font-size: 0.95rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #1e293b;
+    transition: border-color 0.2s ease;
+}
+
+form.card input:focus {
+    border-color: #3b82f6;
+    outline: none;
+}
+
+form.card button[type="submit"] {
+    align-self: flex-start;
+    background-color: #3b82f6;
+}
+
+form.card button[type="submit"]:hover {
+    background-color: #2563eb;
+}
+
+form.card input[type="time"] {
+    margin-top: 4px;
+    padding: 8px;
+    font-size: 0.95rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #1e293b;
+    transition: border-color 0.2s ease;
+}
+
+form.card input[type="text"] {
+    margin-top: 4px;
+    padding: 8px;
+    font-size: 0.95rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #1e293b;
+    transition: border-color 0.2s ease;
+}
+
+
+
+form.card input[type="text"]:focus {
+    border-color: #3b82f6;
+    outline: none;
+}

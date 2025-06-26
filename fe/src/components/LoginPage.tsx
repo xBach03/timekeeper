@@ -54,6 +54,8 @@ export const LoginPage: React.FC = () => {
                     localStorage.setItem("userName", loginData.name); // Save name as token
                     setStatus(`Recognized: ${loginData.name}`);
                     setCountdown(5);
+                } else {
+                    setStatus(`Not recognized: ${name}`);
                 }
             } else {
                 setStatus(`Not recognized: ${name}`);
