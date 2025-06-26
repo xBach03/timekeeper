@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "payroll")
 @Setter
@@ -20,13 +22,22 @@ public class PayrollEntity {
     private Long id;
 
     @Column(name = "total_salary")
-    private Long totalSalary;
+    private float totalSalary;
 
     @Column(name = "tax")
-    private Long tax;
+    private float tax;
 
     @Column(name = "bonus")
-    private Long bonus;
+    private float bonus;
+
+    @Column(name = "hours_worked")
+    private float hoursWorked;
+
+    @Column(name = "hourlyRate")
+    private float hourlyRate;
+
+    @Column(name = "date")
+    private LocalDate date;
 
     @Column(name = "period")
     private String period;

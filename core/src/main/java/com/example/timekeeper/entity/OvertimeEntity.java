@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "overtime")
@@ -25,7 +26,13 @@ public class OvertimeEntity {
     private LocalDate date;
 
     @Column(name = "total_hour")
-    private Short totalHour;
+    private float totalHour;
+
+    @Column(name = "start_hour")
+    private LocalTime startHour;
+
+    @Column(name = "end_hour")
+    private LocalTime endHour;
 
     @Column(name = "project")
     private String project;

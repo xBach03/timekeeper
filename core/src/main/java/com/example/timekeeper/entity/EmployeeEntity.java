@@ -84,4 +84,11 @@ public class EmployeeEntity {
     )
     @JsonManagedReference(value = "employee-payroll")
     private List<PayrollEntity> payrollList;
+
+    @OneToMany(
+            mappedBy = "employee",
+            cascade = CascadeType.ALL
+    )
+    @JsonManagedReference(value = "employee-review")
+    private List<PerformanceReviewEntity> performanceReviewList;
 }

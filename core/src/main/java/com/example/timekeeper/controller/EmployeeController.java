@@ -4,9 +4,7 @@ import com.example.timekeeper.constant.Status;
 import com.example.timekeeper.dto.*;
 import com.example.timekeeper.entity.EmployeeEntity;
 import com.example.timekeeper.entity.EmployeeSessionEntity;
-import com.example.timekeeper.service.AttendanceService;
-import com.example.timekeeper.service.EmployeeService;
-import com.example.timekeeper.service.EmployeeSessionService;
+import com.example.timekeeper.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +21,23 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     private final EmployeeSessionService employeeSessionService;
+
     private final AttendanceService attendanceService;
 
+    private final PayrollService payrollService;
+
+    private final OvertimeService overtimeService;
+
     public EmployeeController(EmployeeService employeeService,
-                              EmployeeSessionService employeeSessionService, AttendanceService attendanceService) {
+                              EmployeeSessionService employeeSessionService,
+                              AttendanceService attendanceService,
+                              PayrollService payrollService,
+                              OvertimeService overtimeService) {
         this.employeeService = employeeService;
         this.employeeSessionService = employeeSessionService;
         this.attendanceService = attendanceService;
+        this.payrollService = payrollService;
+        this.overtimeService = overtimeService;
     }
 
     @PostMapping("/register")
@@ -52,6 +60,38 @@ public class EmployeeController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResDto> login(@RequestBody RecognizeReqDto loginReq) {
-        return new ResponseEntity<>(employeeSessionService.login(loginReq.getName()), HttpStatus.OK);
+        var result = employeeSessionService.login(loginReq.getName());
+        if (Objects.nonNull(result)) {
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(@RequestParam String name) {
+        return new ResponseEntity<>(employeeSessionService.logout(name), HttpStatus.OK);
+    }
+
+    @GetMapping("/payroll")
+    public ResponseEntity<List<PayrollDto>> getPayrollList(@RequestParam String name) {
+        List<PayrollDto> result = payrollService.getPayroll(name);
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/overtime")
+    public ResponseEntity<List<OvertimeDto>> getOverTimeList(@RequestParam String name) {
+        List<OvertimeDto> result = overtimeService.getOvertimeByEmployeeName(name);
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("overtime_log")
+    public ResponseEntity<String> logOverTime(@RequestBody OTLogDto otLogDto) {
+        return new ResponseEntity<>(overtimeService.save(otLogDto), HttpStatus.OK);
     }
 }

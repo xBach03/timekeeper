@@ -34,10 +34,10 @@ public class TimekeeperApplication {
 			String[] title = new String[]{"Software Engineer", "Principal Engineer", "Software QA Engineer"};
 			String[] gender = new String[]{"male", "female"};
 			ManagerEntity manager1 = new ManagerEntity();
-			manager1.setTitle("Manager, Software Development")
+			manager1.setLevel("Senior")
 					.setTeamSize((short) 10);
 			ManagerEntity manager2 = new ManagerEntity();
-			manager2.setTitle("Manager, CSE")
+			manager2.setLevel("First-line")
 					.setTeamSize((short) 10);
 			DepartmentEntity department1 = new DepartmentEntity();
 			department1.setName("Product R&D")

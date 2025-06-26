@@ -21,11 +21,17 @@ public class ManagerEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "level")
+    private String level;
 
     @Column(name = "team_size")
     private Short teamSize;
+
+    @Column(name = "review_count")
+    private long reviewCount;
+
+    @Column(name = "average_review_score")
+    private float averageReviewScore;
 
     @OneToOne(mappedBy = "manager")
     @JsonManagedReference(value = "manager-department")
@@ -37,5 +43,12 @@ public class ManagerEntity {
     )
     @JsonManagedReference(value = "manager-employee")
     private List<EmployeeEntity> employeeList;
+
+    @OneToMany(
+            mappedBy = "manager",
+            cascade = CascadeType.ALL
+    )
+    @JsonManagedReference(value = "manager-review")
+    private List<PerformanceReviewEntity> perFormanceReviewList;
 
 }
