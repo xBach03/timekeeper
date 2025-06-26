@@ -5,7 +5,7 @@ from imutils import face_utils
 from scipy.spatial import distance as dist
 
 # Blink detection settings
-BLINK_THRESHOLD = 0.27
+BLINK_THRESHOLD = 0.23
 CONSEC_FRAMES = 3
 
 
