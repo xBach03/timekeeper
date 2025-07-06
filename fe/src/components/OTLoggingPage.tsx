@@ -55,7 +55,7 @@ const OTLogging: React.FC = () => {
             return;
         }
 
-        // ✅ Send "HH:mm" string values directly
+        // Send "HH:mm" string values directly
         fetch("http://localhost:8080/api/employee/overtime_log", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

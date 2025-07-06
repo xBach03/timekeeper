@@ -48,8 +48,8 @@ export const IndexPage: React.FC = () => {
             const d = new Date(monday);
             d.setDate(monday.getDate() + i);
             return {
-                date: `${dayLabel} ${d.getDate()}`,  // used for label
-                key: dayLabel,                       // used for lookup
+                date: `${dayLabel} ${d.getDate()}`,
+                key: dayLabel,
                 hours: 0
             } as any;
         });
@@ -66,6 +66,7 @@ export const IndexPage: React.FC = () => {
     useEffect(() => {
         const name = localStorage.getItem("userName") || "Unknown";
         setUserName(name);
+
         // Dashboard
         fetch(`http://localhost:8080/api/index/dashboard?name=${name}`)
             .then(res => res.json())
@@ -73,7 +74,7 @@ export const IndexPage: React.FC = () => {
             .catch(() => setDashboardData({
                 shift: "N/A", breakTime: "N/A", leaveRequests: "N/A", notifications: []
             }));
-        // Leave status
+
         // Leave status
         fetch(`http://localhost:8080/api/index/leave-status?name=${name}`)
             .then(res => res.json())

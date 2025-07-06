@@ -29,7 +29,7 @@ export const RegisterPage: React.FC = () => {
         const dto = {
             name: formData.name,
             email: formData.email,
-            dateOfBirth: formData.dob, // Make sure dob is in ISO format
+            dateOfBirth: formData.dob, // ISO format
             phoneNumber: formData.phone,
             title: formData.title
         };

@@ -1,6 +1,5 @@
 package com.example.timekeeper.entity;
 
-import com.example.timekeeper.constant.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

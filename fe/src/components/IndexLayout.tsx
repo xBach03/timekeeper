@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/IndexPage.css";
-import { useEffect, useRef } from "react";
 
 interface Props {
     userName: string;
@@ -16,7 +15,6 @@ const IndexLayout: React.FC<Props> = ({ userName, children }) => {
         fetch(`http://localhost:8080/api/employee/logout?name=${name}`)
             .then(res => {
                 if (res.ok) {
-                    // Optional: clear localStorage or redirect to login
                     localStorage.removeItem("userName");
                 } else {
                     alert("Logout failed");

@@ -177,14 +177,14 @@ public class AttendanceService {
             LocalTime currentShiftStart = shiftStart;
             LocalTime currentShiftEnd = shiftEnd;
 
-            // Remove leave intervals from shift
+            // Remove leave time that overlaps in shift
             for (LeaveTimeEntity leave : dailyLeaves) {
                 LocalTime leaveStart = leave.getStartHour();
                 LocalTime leaveEnd = leave.getEndHour();
 
                 // If leave fully covers shift, skip
                 if (!leaveStart.isAfter(currentShiftStart) && !leaveEnd.isBefore(currentShiftEnd)) {
-                    currentShiftStart = null; // no shift today
+                    currentShiftStart = null;
                     break;
                 }
 
@@ -206,8 +206,8 @@ public class AttendanceService {
                 }
             }
 
+            // Full day leave
             if (currentShiftStart == null || !currentShiftStart.isBefore(currentShiftEnd)) {
-                // no working hours today (fully covered by leave)
                 continue;
             }
 

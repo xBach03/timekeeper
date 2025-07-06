@@ -61,7 +61,7 @@
 }
 
 .check-buttons button:disabled {
-    background-color: #9ca3af; /* Gray */
+    background-color: #9ca3af;
     cursor: not-allowed;
 }
 

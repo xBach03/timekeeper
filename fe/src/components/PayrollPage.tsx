@@ -68,7 +68,7 @@ const Payroll: React.FC = () => {
                         </tr>
                     ))}
 
-                    {/* ✅ Totals Row */}
+                    {/* Total Row */}
                     <tr style={{fontWeight: "bold", borderTop: "2px solid #ccc"}}>
                         <td>Total</td>
                         <td>{payrollData.reduce((sum, r) => sum + r.hoursWorked, 0)}</td>
