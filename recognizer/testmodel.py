@@ -25,7 +25,6 @@ def recognize_face():
     video = cv2.VideoCapture(0)
     blink_counter = 0
     blink_detected_flag = False
-    recognized_name = "No face"
 
     for _ in range(1000):
         ret, frame = video.read()

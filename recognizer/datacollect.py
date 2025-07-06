@@ -21,7 +21,6 @@ def collect_face_data(name, max_samples=30, save_dir="datasets"):
     os.makedirs(person_dir, exist_ok=True)
 
     face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-    detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
     cap = cv2.VideoCapture(0)
@@ -40,7 +39,6 @@ def collect_face_data(name, max_samples=30, save_dir="datasets"):
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
         for (x, y, w, h) in faces:
-            face_img = frame[y:y + h, x:x + w]
             rect = dlib.rectangle(int(x), int(y), int(x + w), int(y + h))
             shape = predictor(gray, rect)
             shape = face_utils.shape_to_np(shape)
